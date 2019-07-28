@@ -1,0 +1,8 @@
+
+class NetFlow{
+    public:
+    NetFlow(){
+
+    }
+};
+

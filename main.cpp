@@ -1,5 +1,8 @@
+#include <iostream>
+#include"Algorithm/NetFlow.cpp"
+using namespace std;
 
-class NetFlow{
-    public:
-    
+int main()
+{
+
 }
