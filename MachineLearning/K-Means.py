@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
 from pandas import DataFrame,Series
@@ -28,8 +29,8 @@ r.columns = list(d.columns) + ["Clustering"]
 print(r.head())
 r.to_csv(outfile)#如果需要保存到本地，就写上这一列
 
-# ------------------------------测试------------------------------------------------
-#可视化过程
+# ------------------------------------可视化过程------------------------------------------
+
 from sklearn.manifold import TSNE
  
 ts = TSNE()
