@@ -1,5 +1,3 @@
-
-
 class SegmentTree
 {
   private:
@@ -23,14 +21,13 @@ class SegmentTree
 			tree[x].lazy = 0;
 		}
 	}
-    ~SegmentTree(){
-        delete a;
-        delete tree;
-    }
   public:
     SegmentTree(const int MAXN,int * array,int len){
         a = array;
         tree = new node[MAXN * 4];
+    }
+	~SegmentTree(){
+        delete tree;
     }
 	void Build(int l, int r,int x = 1){
 		tree[x].l = l;
