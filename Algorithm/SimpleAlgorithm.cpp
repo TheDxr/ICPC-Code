@@ -24,9 +24,9 @@ class SimpleAlgorithm
 	}
     //筛选素数
     static void PrimeScreen(vector<bool> &prime){
-        if(prime.size() > 1)prime[1] = true;
+        if(prime.size() > 1)prime[1] = false;
         for (int i = 4; i < prime.size(); i+=2)
-            prime[i] = true;
+            prime[i] = false;
         for (int i = 2; i < prime.size(); i++){
             if (prime[i]){
                 for (int j = i * 2; j < prime.size(); j += i)
