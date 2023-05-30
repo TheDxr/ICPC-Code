@@ -1,0 +1,8 @@
+digraph my_graph{
+  rankdir = LR;
+  2 -> 3[constraint=false];
+  4 -> 5[constraint=false];
+  7 -> 9[constraint=false];
+  9 -> 11[constraint=false];
+  11 -> NULL[constraint=false,style=dotted];
+}
