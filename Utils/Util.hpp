@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <functional>
 #include <vector>
 #include "DrawGraph.hpp"
 
@@ -211,6 +212,7 @@ void print(ListNode *pHead)
     }
 }
 
+
 template <typename T>
 void print(std::vector<std::vector<T>> matrix)
 {
@@ -237,11 +239,24 @@ void print(std::vector<T> vec)
 }
 
 void print(bool b) { std::cout << (b ? "true" : "false") << std::endl; }
+template <typename T>
+void print(T t)
+{
+    std::cout << t << std::endl;
+}
 
 template <typename T>
-void print(T item)
+void print_in_line(T t)
 {
-    std::cout << item << std::endl;
+    std::cout << t << " ";
+}
+
+template <typename T, typename... Args>
+void print(T t, Args... args)
+{
+    std::cout << t << " ";
+    print_in_line(args...);
+    std::cout << std::endl;
 }
 
 void displayList(
