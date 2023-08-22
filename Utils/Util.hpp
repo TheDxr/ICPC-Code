@@ -1,13 +1,14 @@
 #pragma once
 
 #include <chrono>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <functional>
 #include <vector>
 #include "DrawGraph.hpp"
+#include "Math.hpp"
 
 namespace util
 {
@@ -39,10 +40,12 @@ bool isOperator(char c) { return !isSpace(c) && !isNum(c) && !isLetter(c); }
 #pragma region 测试数据
 // constexpr int MINF = std::numeric_limits<int>::min();
 // constexpr int INF  = std::numeric_limits<int>::max();
-std::vector<std::vector<int>> test_matrix{
+std::vector<std::vector<int>> test_mat4x4_int{
     {1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {5, 4, -9, 16}};
-std::vector<int> test_vector{8, 1, -3, 4, 5, 4, -9, 16, 9};
-std::vector<std::vector<int>> test_matrix_2{{1, 0}};
+std::vector<int> test_vector_int{8, 1, -3, 4, 5, 4, -9, 16, 9};
+std::vector<std::vector<int>> test_mat2x1_int{{1, 0}};
+std::vector<std::vector<float>> test_mat4x4_float{{1.1, 2.2, 3.3, 4.4},{5.5, 6.6, 7.7, 8.8},{9.9, 10.1, 11.2, 12.3},{5.4, 4.3, -9.2, 16.1}};
+
 ListNode *CreateList(std::vector<int> vec)
 {
     ListNode *pHead = new ListNode(-1);
@@ -53,7 +56,7 @@ ListNode *CreateList(std::vector<int> vec)
     }
     return pHead->next;
 }
-ListNode *test_list = CreateList(test_matrix[1]);
+ListNode *test_list = CreateList(test_mat4x4_int[1]);
 std::map<int, ListNode *> CreateListAddress(ListNode *pHead, int max_size = 20)
 {
     std::map<int, ListNode *> NodeAddr;
@@ -204,59 +207,77 @@ void print(ListNode *pHead)
 {
     ListNode *pNext = pHead;
     int i           = 0;
-    std::cout << "==========List=========\n";
+    std::string buffer = "[ ";
     while(pNext != nullptr) {
-        std::cout << pNext->val << " ";
+        buffer += std::to_string(pNext->val) + " ";
         pNext = pNext->next;
         if(i++ > 20) break;
     }
+    buffer += "]\n";
+    std::cout << buffer;
 }
-
 
 template <typename T>
 void print(std::vector<std::vector<T>> matrix)
 {
-    std::cout << "==========matrix=========\n";
-    for(int i = 0; i < matrix.size(); i++) {
-        for(int j = 0; j < matrix[0].size(); j++) {
-            std::cout << matrix[i][j] << " ";
-            if(j == matrix[0].size() - 1) std::cout << std::endl;
+    int row = matrix.size();
+    int col = matrix[0].size();
+
+    int max_type_width = 0;
+    for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+            max_type_width = std::max(max_type_width, (int)std::to_string(matrix[i][j]).size());
         }
     }
-    std::cout << std::endl;
+
+    for(int i = 0; i < row; i++) {
+        std::string buffer;
+        if(i == 0) buffer+= "┌";
+        else if(i == row - 1) buffer += "└";
+        else buffer += "│";
+        for(int j = 0; j < col; j++) {
+            int space = max_type_width - std::to_string(matrix[i][j]).size();
+            buffer += std::string(space, ' ');
+            buffer += std::to_string(matrix[i][j]);
+            if(j == col - 1) {
+                if(i == 0) buffer += " ┐\n";
+                else if(i == row - 1) buffer += " ┘\n";
+                else buffer += " │\n";
+            }else {
+                buffer += " ";
+            }
+        }
+        std::cout << buffer;
+    }
 }
 
 template <typename T>
 void print(std::vector<T> vec)
 {
+    std::string buffer = "[ ";
     for(auto it = vec.begin(); it != vec.end(); it++) {
-        std::cout << *it;
-        if(it != vec.end() - 1) {
-            std::cout << " ";
-        }
+        buffer += std::to_string(*it) + " ";
+//        if(it != vec.end() - 1) {
+//            buffer += " ";
+//        }
     }
-    std::cout << std::endl;
+    buffer += "]\n";
+    std::cout << buffer;
 }
 
-void print(bool b) { std::cout << (b ? "true" : "false") << std::endl; }
-template <typename T>
-void print(T t)
-{
-    std::cout << t << std::endl;
-}
+void print(bool b) { std::cout << (b ? "true" : "false"); }
 
 template <typename T>
-void print_in_line(T t)
+void print(T t,const std::string& end = "\n")
 {
-    std::cout << t << " ";
+    std::cout << t << end;
 }
 
 template <typename T, typename... Args>
 void print(T t, Args... args)
 {
     std::cout << t << " ";
-    print_in_line(args...);
-    std::cout << std::endl;
+    print(args...);
 }
 
 void displayList(

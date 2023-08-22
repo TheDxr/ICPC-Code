@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(Main)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 #file(GLOB_RECURSE inc ECS/*.h)
 #file(GLOB_RECURSE src ECS/*.cpp)
 #
