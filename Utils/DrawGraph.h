@@ -1,9 +1,8 @@
 #pragma once
-#include <fstream>
-#include <map>
-#include <string>
-#include <utility>
+#include "DataStructure.h"
 
+namespace util
+{
 // https://blog.csdn.net/H_18763886211/article/details/112290232
 class DrawGraph
 {
@@ -34,7 +33,7 @@ public:
         out << "  " << node_name;
         int i          = 0;
         bool needBrace = true;
-        for(const auto& p : parameter) {
+        for(const auto &p : parameter) {
             i++;
             if(needBrace) {
                 out << "[";
@@ -95,7 +94,7 @@ public:
 
         int i          = 0;
         bool needBrace = true;
-        for(const auto& p : parameter) {
+        for(const auto &p : parameter) {
             i++;
             if(needBrace) {
                 out << "[";
@@ -138,3 +137,102 @@ private:
     int node_count = 0, relation_count = 0;
     int mode;
 };
+void displayList(
+    std::map<int, ListNode *> NodeAddr, std::string displayPath = "./Display/display.dot")
+{
+    DrawGraph draw(displayPath, DrawGraph::DiGraph);
+
+    draw.Start();
+    draw.Set("rankdir", "LR");
+
+    for(auto &addr : NodeAddr) {
+        if(addr.second->next != nullptr) {
+            draw.CreateRelationship(
+                std::to_string(addr.first),
+                std::to_string(addr.second->next->val),
+                {{"constraint", "false"}});
+        }
+        else {
+            draw.CreateRelationship(
+                std::to_string(addr.first), "NULL", {{"constraint", "false"}, {"style", "dotted"}});
+        }
+    }
+    draw.End();
+}
+std::map<int, ListNode *> CreateListAddress(ListNode *pHead, int max_size = 20)
+{
+    std::map<int, ListNode *> NodeAddr;
+    ListNode *pNode = pHead;
+    int i           = 0;
+    while(pNode != nullptr) {
+        if(i++ > max_size) break;
+        NodeAddr.emplace(pNode->val, pNode);
+        pNode = pNode->next;
+    }
+    return NodeAddr;
+}
+void displayList(
+    ListNode *pHead,
+    std::vector<std::pair<ListNode *, std::string>> HightLight,
+    std::string displayPath = "./Display/display.dot")
+{
+    auto NodeAddr = CreateListAddress(pHead);
+
+    DrawGraph draw(displayPath, DrawGraph::DiGraph);
+    draw.Start();
+    draw.Set("rankdir", "LR");
+
+    for(auto &addr : NodeAddr) {
+        if(addr.second->next != nullptr) {
+            draw.CreateRelationship(
+                std::to_string(addr.first),
+                std::to_string(addr.second->next->val),
+                {{"constraint", "false"}});
+        }
+        else {
+            draw.CreateRelationship(
+                std::to_string(addr.first), "NULL", {{"constraint", "false"}, {"style", "dotted"}});
+        }
+    }
+    for(auto high : HightLight) {
+        std::string highLight =
+            "  " + std::to_string(high.first->val) + "[color=" + high.second + ",style=filled];";
+        draw.AppendProperty(highLight);
+    }
+
+    draw.End();
+}
+
+void displayList(ListNode *pHead, std::string displayPath = "./Display/display.dot")
+{
+    auto NodeAddr = CreateListAddress(pHead);
+
+    DrawGraph draw(displayPath, DrawGraph::DiGraph);
+    draw.Start();
+    draw.Set("rankdir", "LR");
+
+    // int i = 0;
+    // for (auto &addr : NodeAddr)
+    // {
+    //     draw.createNode(to_string( addr.first ),{{"constraint","false"},
+    //                             {"pos","\""+to_string(i++)+",1"+"\""}
+    //                            // {"rect","true"}
+    //                             });
+    // }
+    for(auto &addr : NodeAddr) {
+        if(addr.second->next != nullptr) {
+            draw.CreateRelationship(
+                std::to_string(addr.first),
+                std::to_string(addr.second->next->val),
+                {{"constraint", "false"}});
+        }
+        else {
+            draw.CreateRelationship(
+                std::to_string(addr.first), "NULL", {{"constraint", "false"}, {"style", "dotted"}});
+        }
+    }
+
+    draw.End();
+}
+
+} // namespace util
